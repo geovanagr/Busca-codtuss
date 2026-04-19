@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Busca Tuss</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+
+  <h1>BUSCA TUSS</h1>
+
+  <div class="search-box">
+    <input type="text" id="busca" placeholder="Digite um procedimento...">
+  </div>
+
+  <div class="sugestoes" id="sugestoes"></div>
+
+  <div class="resultado" id="resultado" style="display:none;">
+    <div class="nome" id="nome"></div>
+    <div class="codigo" id="codigo"></div>
+    <button onclick="copiar()">Copiar código</button>
+    <div id="copiadoMsg">✔ Copiado!</div>
+  </div>
+
+</div>
+
+<script>
+const banco = [
+  { nome: "Hemograma completo", codigo: "40304361 " },
+  { nome: "Glicose", codigo: "40302040" },
+  { nome: "Colesterol total", codigo: "40301605" },
+  { nome: "Triglicerídeos", codigo: "40302547" },
+  { nome: "Creatinina", codigo: "40301630" },
+  { nome: "TC Tórax", codigo: "41001079" },
+  { nome: "Ecodopplercardiograma transtorácico", codigo: "40901106" },
+  { nome: "Ecg convencional de ate 12 derivações", codigo: "40101010" },
+  { nome: "Monitorização Ambulatorial da Pressão Arterial - MAPA (24 horas) ", codigo: "20102038" },
+  { nome: "Vitamina b12", codigo: "40316572" },
+  { nome: "Us tireoide", codigo: "40901203" },
+  { nome: "Rm articular por articulação", codigo: "41101316" }, 
+  { nome: "RM de coluna cervical, dorsal ou lombar", codigo: "41101227" },
+  { nome: "TC - Coluna cervical ou dorsal ou lombo-sacra - até 3 segmentos", codigo: "41001125" },
+  { nome: "Eletroneuromiografia de MMII (Membros Inferiores)", codigo: "40103315" },
+  { nome: "Eletroneuromiografia de MMSS", codigo: "40103323" },
+  { nome: "Rm crânio", codigo: "41101014" },
+  { nome: "Ecodoppler de Carótidas e Artériais e Vertebrais", codigo:"40901360" },
+  { nome: "Doppler de orgãos ou estrututas isoladas", codigo: "40901386" },
+  { nome: "Medicamentos", codigo: "80071104" },
+  { nome: "Endoscopia Digestiva alta", codigo: "40201120"},
+  { nome: "Endoscopia digestiva alta com biópsia e teste de urease (pesquisa Helicobacter pylori) ", codigo:"40202616" } ,
+  { nome: "TC abdomem total", codigo: "40901095" }
+
+
+
+
+
+
+];
+
+const input = document.getElementById("busca");
+const sugestoes = document.getElementById("sugestoes");
+
+input.addEventListener("input", () => {
+  let termo = input.value.toLowerCase();
+  sugestoes.innerHTML = "";
+
+  if (!termo) return;
+
+  let resultados = banco.filter(item =>
+    item.nome.toLowerCase().includes(termo)
+  );
+
+  resultados.forEach(item => {
+    let div = document.createElement("div");
+    div.classList.add("item");
+    div.innerHTML = `<strong>${item.nome}</strong><br><small>TUSS: ${item.codigo}</small>`;
+
+    div.onclick = () => selecionar(item);
+
+    sugestoes.appendChild(div);
+  });
+});
+
+function selecionar(item) {
+  document.getElementById("nome").innerText = item.nome;
+  document.getElementById("codigo").innerText = "TUSS: " + item.codigo;
+
+  document.getElementById("resultado").style.display = "block";
+  sugestoes.innerHTML = "";
+}
+
+function copiar() {
+  let codigoTexto = document.getElementById("codigo").innerText;
+
+  // Remove "TUSS: "
+  let codigo = codigoTexto.replace("TUSS: ", "");
+
+  navigator.clipboard.writeText(codigo);
+
+  // Feedback visual discreto
+  let msg = document.getElementById("copiadoMsg");
+  msg.style.display = "block";
+
+  setTimeout(() => {
+    msg.style.display = "none";
+  }, 1500);
+}
+</script>
+
+</body>
+</html>
+
+
